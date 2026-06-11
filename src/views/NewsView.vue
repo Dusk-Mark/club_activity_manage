@@ -84,7 +84,7 @@ onMounted(() => {
           </button>
           <div>
             <p class="text-sm text-slate-400">Newsroom</p>
-            <h1 class="font-display text-4xl font-bold text-white">新闻公告管理</h1>
+            <h1 class="font-display text-4xl font-bold text-white">中北大学社团活动</h1>
           </div>
         </div>
 

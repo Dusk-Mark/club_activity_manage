@@ -159,7 +159,7 @@ const handleSubmit = async () => {
           <Compass class="h-5 w-5" />
         </div>
         <div>
-          <p class="font-display text-lg font-bold text-white">校园社团活动管理平台</p>
+          <p class="font-display text-lg font-bold text-white">中北大学社团活动</p>
           <p class="text-sm text-slate-400">服务学校社团招新、活动组织与日常管理</p>
         </div>
       </div>
@@ -190,12 +190,7 @@ const handleSubmit = async () => {
           <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <div class="space-y-6">
               <div class="space-y-4">
-                <h1 class="max-w-xl font-display text-4xl font-bold leading-tight text-white md:text-5xl xl:text-6xl">
-                  让校园社团的活力与秩序
-                  <span class="block bg-gradient-to-r from-[#c0a26a] to-[#e7d29c] bg-clip-text text-transparent">
-                    在同一空间里被优雅管理
-                  </span>
-                </h1>
+                <h1 class="max-w-xl font-display text-4xl font-bold leading-tight text-white md:text-5xl xl:text-6xl">中北大学社团活动</h1>
                 <p class="max-w-xl text-base leading-7 text-slate-300 md:text-lg">
                   围绕招新、发布、报名、审核、签到与归档，建立更清晰的校园社团协作路径。
                 </p>

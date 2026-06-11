@@ -383,7 +383,7 @@ onMounted(() => {
           </button>
           <div>
             <p class="text-sm text-slate-400">League Console</p>
-            <h1 class="font-display text-3xl font-bold text-white">校团委综合后台</h1>
+            <h1 class="font-display text-3xl font-bold text-white">中北大学社团活动</h1>
           </div>
         </div>
 

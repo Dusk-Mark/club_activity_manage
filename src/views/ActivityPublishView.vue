@@ -173,7 +173,7 @@ onMounted(async () => {
           </button>
           <div>
             <p class="text-sm text-slate-400">Activity Studio</p>
-            <h1 class="font-display text-3xl font-bold text-white">发布新活动</h1>
+            <h1 class="font-display text-3xl font-bold text-white">中北大学社团活动</h1>
           </div>
         </div>
         <span class="club-pill w-fit px-4 py-2 text-sm">活动编排入口</span>

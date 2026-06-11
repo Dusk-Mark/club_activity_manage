@@ -227,7 +227,7 @@ onMounted(() => {
           </button>
           <div>
             <p class="text-sm text-slate-400">Club Tasks</p>
-            <h1 class="font-display text-3xl font-bold text-white">社团任务中心</h1>
+            <h1 class="font-display text-3xl font-bold text-white">中北大学社团活动</h1>
           </div>
         </div>
 

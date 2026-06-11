@@ -65,7 +65,7 @@ onMounted(() => {
           </button>
           <div>
             <p class="text-sm text-slate-400">Club Directory</p>
-            <h1 class="font-display text-4xl font-bold text-white md:text-5xl">探索社团</h1>
+            <h1 class="font-display text-4xl font-bold text-white md:text-5xl">中北大学社团活动</h1>
           </div>
           <p class="max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
             浏览校园里的兴趣共同体，查看简介、成员规模与近期动向，并快速进入对应社团主页。
