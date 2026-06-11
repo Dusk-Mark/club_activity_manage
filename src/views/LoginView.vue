@@ -165,9 +165,9 @@ const handleSubmit = async () => {
       </div>
 
       <div class="hidden items-center gap-2 lg:flex">
-        <span class="club-pill px-4 py-2 text-sm">社团报名</span>
-        <span class="rounded-full border border-white/8 px-4 py-2 text-sm text-slate-300">校园活动</span>
-        <span class="rounded-full border border-white/8 px-4 py-2 text-sm text-slate-300">成员管理</span>
+        <span class="club-pill px-4 py-2 text-sm">活动统筹</span>
+        <span class="club-status-chip px-4 py-2 text-sm">社团治理</span>
+        <span class="club-status-chip px-4 py-2 text-sm">成长档案</span>
       </div>
 
       <button
@@ -182,7 +182,7 @@ const handleSubmit = async () => {
     <main class="mx-auto mt-6 grid max-w-7xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
       <section class="flex flex-col justify-between gap-6">
         <div class="club-panel overflow-hidden px-6 py-7 md:px-8 lg:px-10">
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-[#e7d29c]/20 bg-[#e7d29c]/10 px-4 py-2 text-sm font-medium text-[#f2ddae]">
+          <div class="mb-6 club-section-label text-sm font-medium">
             <Sparkles class="h-4 w-4" />
             学校社团统一登录入口，面向学生、社团干部与校团委老师。
           </div>
@@ -190,17 +190,14 @@ const handleSubmit = async () => {
           <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <div class="space-y-6">
               <div class="space-y-4">
-                <p class="text-sm font-medium text-slate-400">
-                  DESIGN_VARIANCE 7 / MOTION_INTENSITY 6 / VISUAL_DENSITY 4
-                </p>
                 <h1 class="max-w-xl font-display text-4xl font-bold leading-tight text-white md:text-5xl xl:text-6xl">
-                  让校园社团的活力与管理秩序
+                  让校园社团的活力与秩序
                   <span class="block bg-gradient-to-r from-[#c0a26a] to-[#e7d29c] bg-clip-text text-transparent">
-                    在同一个平台中高效协同
+                    在同一空间里被优雅管理
                   </span>
                 </h1>
                 <p class="max-w-xl text-base leading-7 text-slate-300 md:text-lg">
-                  围绕社团招新、活动发布、报名审核、成员服务等核心场景，帮助学校沉淀更清晰的校园社团管理流程。
+                  围绕招新、发布、报名、审核、签到与归档，建立更清晰的校园社团协作路径。
                 </p>
               </div>
 
@@ -225,7 +222,7 @@ const handleSubmit = async () => {
                 </div>
                 <div class="club-panel-muted p-5">
                   <p class="mb-2 text-sm font-medium text-slate-400">平台特性</p>
-                  <p class="text-lg font-semibold text-white">统一入口 + 分角色权限 + 社团业务协同</p>
+                  <p class="text-lg font-semibold text-white">统一入口、分角色权限与社团业务协同</p>
                 </div>
               </div>
             </div>
@@ -407,21 +404,21 @@ const handleSubmit = async () => {
           </button>
         </form>
 
-        <div class="mt-6 grid gap-4 md:grid-cols-2">
-          <div class="rounded-3xl border border-white/8 bg-white/[0.03] p-4">
-            <p class="text-sm font-medium text-[#f2ddae]">注册后可直接使用</p>
-            <p class="mt-2 text-sm leading-6 text-slate-300">
-              我的社团、活动报名、个人中心、密码修改与参与记录都会统一归档。
-            </p>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <div class="rounded-3xl border border-white/8 bg-white/[0.03] p-4">
+              <p class="text-sm font-medium text-[#f2ddae]">注册后可直接使用</p>
+              <p class="mt-2 text-sm leading-6 text-slate-300">
+                我的社团、活动报名、个人中心与参与记录会统一归档到同一账户。
+              </p>
+            </div>
+            <div class="rounded-3xl border border-white/8 bg-white/[0.03] p-4">
+              <p class="text-sm font-medium text-[#9fc0f7]">更贴近校园场景</p>
+              <p class="mt-2 text-sm leading-6 text-slate-300">
+                表单、角色切换和入口组织都围绕学校社团的实际管理路径设计。
+              </p>
+            </div>
           </div>
-          <div class="rounded-3xl border border-white/8 bg-white/[0.03] p-4">
-            <p class="text-sm font-medium text-[#9fc0f7]">更贴近校园场景</p>
-            <p class="mt-2 text-sm leading-6 text-slate-300">
-              按钮、表单与身份切换都围绕学校社团业务设计，减少首次进入平台时的理解成本。
-            </p>
-          </div>
-        </div>
       </section>
     </main>
   </div>
-</template>s
+</template>

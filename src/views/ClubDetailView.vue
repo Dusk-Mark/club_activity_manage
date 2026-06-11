@@ -113,169 +113,200 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-6xl mx-auto">
-      <!-- 头部导航 -->
-      <header class="flex items-center justify-between mb-10">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6">
+      <header class="club-panel flex items-center justify-between gap-4 px-5 py-5 md:px-6">
+        <button
+          type="button"
+          class="club-back-button inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold"
+          @click="router.back()"
+        >
+          <ArrowLeft class="h-4 w-4" />
           返回社团列表
         </button>
-        <div class="flex items-center gap-3">
-          <button class="p-3 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:text-primary transition-all">
-            <MessageSquare class="w-5 h-5" />
-          </button>
-        </div>
+        <button type="button" class="club-back-button flex h-11 w-11 items-center justify-center">
+          <MessageSquare class="h-5 w-5" />
+        </button>
       </header>
 
-      <div v-if="loading" class="flex flex-col items-center justify-center py-20">
-        <Loader2 class="w-10 h-10 animate-spin text-primary" />
-        <p class="mt-4 text-slate-400 font-bold">正在加载社团详情...</p>
+      <div v-if="loading" class="club-panel flex flex-col items-center justify-center py-20">
+        <Loader2 class="h-10 w-10 animate-spin text-[#ecd7ad]" />
+        <p class="mt-4 text-sm text-slate-400">正在加载社团详情...</p>
       </div>
 
-      <main v-else-if="club" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <!-- 左侧：社团概览与详情 -->
-        <div class="lg:col-span-8 space-y-8">
-          <!-- 封面卡片 -->
-          <section class="bg-white p-2 rounded-[3.5rem] shadow-xl overflow-hidden">
-            <div class="h-64 md:h-80 w-full rounded-[3rem] overflow-hidden relative">
-              <img :src="`https://picsum.photos/seed/${club.id}/1200/400`" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div class="absolute bottom-8 left-8 flex items-end gap-6">
-                <div class="w-24 h-24 rounded-[2rem] bg-white p-1 shadow-2xl border-4 border-white/20 overflow-hidden">
-                  <img :src="club.logo_url || `https://ui-avatars.com/api/?name=${club.name}&background=random&size=128`" class="w-full h-full object-cover rounded-[1.8rem]" />
+      <main v-else-if="club" class="grid grid-cols-1 gap-6 xl:grid-cols-[1.08fr_0.92fr]">
+        <section class="space-y-6">
+          <article class="club-panel overflow-hidden p-2">
+            <div class="relative overflow-hidden rounded-[28px]">
+              <img
+                :src="`https://picsum.photos/seed/${club.id}/1400/760`"
+                :alt="club.name"
+                class="h-[360px] w-full object-cover"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#050706] via-[#050706]/30 to-transparent" />
+              <div class="absolute inset-x-0 bottom-0 p-8">
+                <div class="flex flex-wrap items-center gap-3">
+                  <span class="club-pill px-3 py-1 text-xs">活跃社团</span>
+                  <span class="club-status-chip px-3 py-1 text-xs">{{ members.length }} 名成员</span>
                 </div>
-                <div class="mb-2">
-                  <h1 class="text-4xl font-bold text-white mb-2">{{ club.name }}</h1>
-                  <div class="flex items-center gap-3">
-                    <span class="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-bold rounded-full uppercase tracking-widest">
-                      活跃中
-                    </span>
-                    <span class="text-white/80 text-xs font-bold flex items-center gap-1">
-                      <Users class="w-3.5 h-3.5" /> {{ members.length }} 名成员
-                    </span>
+                <div class="mt-5 flex flex-col gap-5 md:flex-row md:items-end">
+                  <div class="h-24 w-24 overflow-hidden rounded-[24px] border border-white/12 bg-white/10 p-1">
+                    <img
+                      :src="club.logo_url || `https://ui-avatars.com/api/?name=${club.name}&background=111515&color=F7F2EA&size=256`"
+                      :alt="club.name"
+                      class="h-full w-full rounded-[20px] object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h1 class="font-display text-5xl font-bold text-white">{{ club.name }}</h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-7 text-white/78">
+                      {{ club.description || '该社团正在完善介绍内容，欢迎先查看活动与成员信息。' }}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
-            
-            <div class="p-10">
-              <h2 class="text-xl font-bold text-slate-900 mb-4">社团简介</h2>
-              <p class="text-slate-500 leading-relaxed whitespace-pre-wrap mb-10">
-                {{ club.description || '该社团暂无详细介绍，欢迎加入后一起丰富它！' }}
-              </p>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-slate-50">
-                <div>
-                  <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <Users class="text-primary w-5 h-5" /> 核心成员
-                  </h3>
-                  <div class="flex -space-x-3 mb-4">
-                    <img v-for="m in members" :key="m.id" 
-                         :src="m.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${m.profiles?.full_name}&background=random`" 
-                         class="w-12 h-12 rounded-full border-4 border-white object-cover shadow-sm" />
-                    <div v-if="members.length >= 6" class="w-12 h-12 rounded-full bg-slate-100 border-4 border-white flex items-center justify-center text-slate-400 text-xs font-bold">
-                      +
-                    </div>
-                  </div>
-                  <p class="text-xs text-slate-400 font-medium">当前活跃在社团内的伙伴们</p>
+            <div class="grid gap-4 p-6 md:grid-cols-2">
+              <article class="club-panel-muted p-5">
+                <div class="mb-3 flex items-center gap-2 text-[#ecd7ad]">
+                  <Users class="h-5 w-5" />
+                  <span class="text-sm font-medium">核心成员</span>
                 </div>
+                <div class="flex -space-x-3">
+                  <img
+                    v-for="m in members"
+                    :key="m.id"
+                    :src="m.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${m.profiles?.full_name}&background=111515&color=F7F2EA`"
+                    :alt="m.profiles?.full_name || '成员头像'"
+                    class="h-12 w-12 rounded-full border-2 border-[#111515] object-cover"
+                  />
+                </div>
+                <p class="mt-4 text-sm leading-6 text-slate-300">当前活跃在社团内部的成员将优先出现在这里。</p>
+              </article>
 
-                <div>
-                  <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
-                    <ShieldCheck class="text-emerald-500 w-5 h-5" /> 认证信息
-                  </h3>
-                  <div class="space-y-2">
-                    <div class="text-sm font-bold text-slate-600">创建人：{{ club.profiles?.full_name }}</div>
-                    <div class="text-xs text-slate-400 font-medium">认证时间：{{ new Date(club.created_at).toLocaleDateString() }}</div>
-                  </div>
+              <article class="club-panel-muted p-5">
+                <div class="mb-3 flex items-center gap-2 text-[#d9e7de]">
+                  <ShieldCheck class="h-5 w-5" />
+                  <span class="text-sm font-medium">认证信息</span>
                 </div>
+                <p class="text-sm text-slate-400">创建人</p>
+                <p class="mt-1 text-lg font-semibold text-white">{{ club.profiles?.full_name || '未知' }}</p>
+                <p class="mt-3 text-sm text-slate-400">创建时间</p>
+                <p class="mt-1 text-lg font-semibold text-white">{{ new Date(club.created_at).toLocaleDateString() }}</p>
+              </article>
+            </div>
+          </article>
+
+          <section class="space-y-4">
+            <div class="flex items-center justify-between px-1">
+              <div>
+                <p class="text-sm text-slate-400">Club Activities</p>
+                <h2 class="mt-1 font-display text-3xl font-bold text-white">社团活动</h2>
               </div>
+              <button type="button" class="text-sm font-medium text-[#ecd7ad]">查看全部活动</button>
+            </div>
+
+            <div v-if="activities.length === 0" class="club-empty-state p-12">
+              <Calendar class="mx-auto h-12 w-12 text-slate-500" />
+              <p class="mt-4 font-display text-3xl font-bold text-white">暂无近期活动</p>
+            </div>
+
+            <div v-else class="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <button
+                v-for="act in activities"
+                :key="act.id"
+                type="button"
+                @click="router.push(`/activity/${act.id}`)"
+                class="card-hover club-panel-muted p-5 text-left"
+              >
+                <h3 class="font-display text-2xl font-bold text-white">{{ act.title }}</h3>
+                <div class="mt-4 space-y-2 text-sm text-slate-400">
+                  <p class="flex items-center gap-2">
+                    <Calendar class="h-4 w-4" />
+                    {{ new Date(act.start_time).toLocaleDateString() }}
+                  </p>
+                  <p class="flex items-center gap-2">
+                    <MapPin class="h-4 w-4" />
+                    {{ act.location || '校内' }}
+                  </p>
+                </div>
+              </button>
             </div>
           </section>
+        </section>
 
-          <!-- 社团动态/活动 -->
-          <section>
-            <div class="flex items-center justify-between mb-6 px-4">
-              <h3 class="text-2xl font-bold text-slate-900">社团活动</h3>
-              <button class="text-sm font-bold text-primary hover:underline">查看全部活动</button>
+        <aside class="space-y-6">
+          <section class="club-panel sticky top-6 p-6 md:p-8">
+            <div class="mb-6">
+              <p class="text-sm text-slate-400">Membership</p>
+              <h3 class="mt-1 font-display text-3xl font-bold text-white">加入社团</h3>
             </div>
-            
-            <div v-if="activities.length === 0" class="bg-white p-12 rounded-[3rem] shadow-xl text-center text-slate-300">
-              <Calendar class="w-12 h-12 mx-auto mb-4" />
-              <p class="font-bold">暂无近期活动</p>
+
+            <div
+              v-if="message.text"
+              :class="[
+                'mb-6 rounded-2xl border px-4 py-3 text-sm leading-6',
+                message.type === 'success'
+                  ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-100'
+                  : 'border-rose-400/20 bg-rose-400/10 text-rose-100'
+              ]"
+            >
+              <div class="flex items-center gap-2">
+                <CheckCircle2 v-if="message.type === 'success'" class="h-5 w-5" />
+                <span>{{ message.text }}</span>
+              </div>
             </div>
-            
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div v-for="act in activities" :key="act.id" 
-                   @click="router.push(`/activity/${act.id}`)"
-                   class="bg-white p-6 rounded-[2.5rem] shadow-lg hover:shadow-xl transition-all cursor-pointer group">
-                <h4 class="font-bold text-slate-800 text-lg mb-3 group-hover:text-primary transition-colors">{{ act.title }}</h4>
-                <div class="space-y-2">
-                  <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                    <Calendar class="w-3.5 h-3.5" /> {{ new Date(act.start_time).toLocaleDateString() }}
-                  </div>
-                  <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
-                    <MapPin class="w-3.5 h-3.5" /> {{ act.location || '校内' }}
-                  </div>
+
+            <div v-if="isMember" class="club-panel-muted p-6 text-center">
+              <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/14 text-emerald-100">
+                <ShieldCheck class="h-6 w-6" />
+              </div>
+              <h4 class="mt-4 text-lg font-semibold text-white">您已是该社团成员</h4>
+              <p class="mt-2 text-sm text-slate-400">欢迎继续参与社团活动与内部协作。</p>
+            </div>
+
+            <div v-else-if="hasApplied" class="club-panel-muted p-6 text-center">
+              <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-400/14 text-amber-100">
+                <Clock class="h-6 w-6" />
+              </div>
+              <h4 class="mt-4 text-lg font-semibold text-white">加入申请审核中</h4>
+              <p class="mt-2 text-sm text-slate-400">请耐心等待管理员处理您的申请。</p>
+            </div>
+
+            <div v-else class="space-y-5">
+              <div class="club-panel-muted p-5">
+                <div class="mb-3 flex items-center gap-3 text-[#d9e7de]">
+                  <Info class="h-5 w-5" />
+                  <span class="text-sm font-medium">加入后可优先参与内部活动</span>
                 </div>
-              </div>
-            </div>
-          </section>
-        </div>
-
-        <!-- 右侧：操作与状态 -->
-        <aside class="lg:col-span-4 space-y-6">
-          <section class="bg-white p-8 rounded-[3rem] shadow-xl sticky top-8">
-            <h3 class="font-bold text-xl mb-6">加入社团</h3>
-            
-            <div v-if="message.text" :class="['p-4 rounded-2xl text-sm font-bold flex items-center gap-2 mb-6', message.type === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600']">
-              <CheckCircle2 v-if="message.type === 'success'" class="w-5 h-5" />
-              {{ message.text }}
-            </div>
-
-            <div v-if="isMember" class="bg-emerald-50 p-6 rounded-[2rem] border border-emerald-100 text-center">
-              <div class="w-12 h-12 bg-emerald-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
-                <ShieldCheck class="w-6 h-6" />
-              </div>
-              <h4 class="font-bold text-emerald-700 mb-1">您已是该社团成员</h4>
-              <p class="text-xs text-emerald-600/80 font-medium">欢迎参与我们的活动！</p>
-            </div>
-
-            <div v-else-if="hasApplied" class="bg-amber-50 p-6 rounded-[2rem] border border-amber-100 text-center">
-              <div class="w-12 h-12 bg-amber-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/20">
-                <Clock class="w-6 h-6" />
-              </div>
-              <h4 class="font-bold text-amber-700 mb-1">加入申请审核中</h4>
-              <p class="text-xs text-amber-600/80 font-medium">请耐心等待管理员处理您的申请。</p>
-            </div>
-
-            <div v-else class="space-y-6">
-              <div class="p-5 bg-blue-50 rounded-[2rem] border border-blue-100 flex gap-4">
-                <Info class="w-6 h-6 text-blue-500 flex-shrink-0" />
-                <p class="text-xs text-blue-700 font-medium leading-relaxed">
-                  加入社团后，您可以优先报名该社团的各类活动，并获得内部专属资源。
+                <p class="text-sm leading-7 text-slate-300">
+                  成为成员后，你可以优先获取活动通知、内部资源和组织动态。
                 </p>
               </div>
-              <button 
+              <button
+                type="button"
                 @click="handleJoinRequest"
                 :disabled="joining"
-                class="w-full bg-primary hover:bg-primary-dark disabled:opacity-50 text-white py-5 rounded-[2rem] font-bold shadow-xl shadow-primary/20 transition-all flex items-center justify-center gap-2"
+                class="club-button-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-semibold disabled:opacity-60"
               >
-                <Loader2 v-if="joining" class="w-5 h-5 animate-spin" />
+                <Loader2 v-if="joining" class="h-5 w-5 animate-spin" />
                 <template v-else>
-                  <UserPlus class="w-5 h-5" />
+                  <UserPlus class="h-5 w-5" />
                   填写加入申请
                 </template>
               </button>
             </div>
           </section>
 
-          <!-- 快速反馈 -->
-          <section class="bg-slate-900 p-8 rounded-[3rem] shadow-xl text-white">
-            <h3 class="font-bold text-lg mb-4">联系我们</h3>
-            <p class="text-slate-400 text-sm mb-6 leading-relaxed">对社团有任何疑问？欢迎在留言板留言或直接联系创建人。</p>
-            <button class="w-full py-4 bg-white/10 hover:bg-white/20 rounded-2xl text-sm font-bold transition-all border border-white/5">发送私信</button>
+          <section class="club-panel-muted p-6">
+            <h3 class="font-display text-2xl font-bold text-white">联系我们</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-300">
+              对社团有任何疑问，欢迎前往留言区交流，或直接联系创建人了解更多细节。
+            </p>
+            <button type="button" class="club-button-secondary mt-5 w-full rounded-2xl px-5 py-4 text-sm font-semibold">
+              发送私信
+            </button>
           </section>
         </aside>
       </main>

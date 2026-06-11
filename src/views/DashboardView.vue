@@ -425,7 +425,7 @@ onMounted(() => {
                     {{ activities.length ? '查看近期开场活动' : '先创建社团或发布活动' }}
                   </p>
                   <p class="mt-2 text-sm leading-6 text-slate-300">
-                    通过错位布局把高优先级信息放大，减少传统后台横向排满后的疲劳感。
+                    先处理最重要的事务，再逐步浏览成员、申请与社区信息。
                   </p>
                 </div>
               </div>
@@ -468,7 +468,7 @@ onMounted(() => {
               <p class="text-sm text-slate-400">Quick Actions</p>
               <h3 class="mt-1 font-display text-2xl font-bold text-white">快捷通道</h3>
             </div>
-            <span class="rounded-full border border-white/8 px-3 py-1 text-xs text-slate-400">微动效已启用</span>
+            <span class="rounded-full border border-white/8 px-3 py-1 text-xs text-slate-400">高频操作入口</span>
           </div>
 
           <div class="grid gap-4 md:grid-cols-6">
@@ -491,7 +491,7 @@ onMounted(() => {
           </div>
 
           <div class="mt-4 rounded-[20px] border border-[#4a6fa5]/20 bg-[#4a6fa5]/10 p-4 text-sm leading-6 text-slate-200">
-            当前面板采用不对称分区，优先把行动入口和状态信息拆开显示，避免传统后台的整齐但单调。
+            把发布、创建、审核与交流拆分成独立入口，可以更快定位当前要处理的事务。
           </div>
         </section>
 
@@ -672,7 +672,7 @@ onMounted(() => {
             <Sparkles class="h-8 w-8 text-slate-500" />
             <p class="mt-4 font-display text-2xl font-bold text-white">活动列表还没有被点亮</p>
             <p class="mt-2 max-w-sm text-sm leading-6 text-slate-400">
-              未来活动为空时，页面保留清晰空状态，而不是用空表格或空白卡片占位。
+              当前还没有未来活动，先去发布新活动后，这里会自动显示时间、地点和参与节奏。
             </p>
             <button
               class="club-button-primary mt-5 rounded-2xl px-5 py-3 text-sm font-semibold"

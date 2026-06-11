@@ -76,111 +76,160 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-3xl mx-auto">
-      <!-- 头部 -->
-      <header class="flex items-center justify-between mb-8">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
-          返回
-        </button>
-        <h1 class="text-xl font-bold text-slate-900">个人中心</h1>
-        <div class="w-20"></div> <!-- 占位平衡 -->
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl space-y-6">
+      <header class="club-panel flex flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="club-back-button flex h-12 w-12 items-center justify-center"
+            @click="router.back()"
+          >
+            <ArrowLeft class="h-5 w-5" />
+          </button>
+          <div>
+            <p class="text-sm text-slate-400">Profile Archive</p>
+            <h1 class="font-display text-3xl font-bold text-white">个人中心</h1>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 text-sm">
+          <span class="club-pill px-4 py-2">{{ profile.role === 'student' ? '学生身份' : profile.role }}</span>
+          <span class="club-status-chip px-4 py-2">资料维护</span>
+        </div>
       </header>
 
-      <main class="space-y-6">
-        <!-- 基础资料卡片 -->
-        <section class="bg-white p-8 lg:p-12 rounded-[3rem] shadow-xl relative overflow-hidden">
-          <div class="relative z-10">
-            <!-- 头像部分 -->
-            <div class="flex flex-col items-center mb-10">
+      <main class="grid gap-6 lg:grid-cols-[0.86fr_1.14fr]">
+        <section class="club-panel overflow-hidden p-6 md:p-8">
+          <div class="rounded-[28px] border border-white/8 bg-white/[0.03] p-6">
+            <div class="flex flex-col items-center text-center">
               <div class="relative group">
-                <div class="w-32 h-32 rounded-[2.5rem] bg-slate-100 overflow-hidden border-4 border-white shadow-lg">
-                  <img :src="profile.avatar_url || `https://ui-avatars.com/api/?name=${profile.full_name || 'User'}&background=random&size=128`" 
-                       class="w-full h-full object-cover" />
+                <div class="h-36 w-36 overflow-hidden rounded-[32px] border border-white/10 bg-white/5 p-1 shadow-[0_28px_50px_-24px_rgba(0,0,0,0.8)]">
+                  <img
+                    :src="profile.avatar_url || `https://ui-avatars.com/api/?name=${profile.full_name || 'User'}&background=111515&color=F7F2EA&size=256`"
+                    :alt="profile.full_name || '用户头像'"
+                    class="h-full w-full rounded-[28px] object-cover"
+                  />
                 </div>
-                <button class="absolute bottom-0 right-0 bg-primary text-white p-3 rounded-2xl shadow-lg hover:scale-110 transition-transform">
-                  <Camera class="w-5 h-5" />
+                <button type="button" class="club-button-primary absolute -bottom-2 -right-2 rounded-2xl p-3">
+                  <Camera class="h-5 w-5" />
                 </button>
               </div>
-              <div class="mt-4 text-center">
-                <h2 class="text-2xl font-bold text-slate-900">{{ profile.full_name || '未设置姓名' }}</h2>
-                <div class="flex items-center gap-2 justify-center mt-1">
-                  <span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-widest">
-                    {{ profile.role === 'student' ? '学生' : profile.role }}
-                  </span>
-                </div>
-              </div>
+              <h2 class="mt-6 font-display text-4xl font-bold text-white">
+                {{ profile.full_name || '未设置姓名' }}
+              </h2>
+              <p class="mt-2 text-sm text-slate-400">
+                {{ authStore.user?.email || '暂无邮箱信息' }}
+              </p>
             </div>
 
-            <!-- 表单部分 -->
-            <form @submit.prevent="handleUpdate" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">真实姓名</label>
-                  <div class="relative flex items-center">
-                    <UserIcon class="absolute left-4 w-5 h-5 text-slate-300" />
-                    <input v-model="profile.full_name" type="text" placeholder="请输入姓名" 
-                           class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                  </div>
-                </div>
+            <div class="club-divider my-8" />
 
-                <div class="space-y-2">
-                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">用户名</label>
-                  <div class="relative flex items-center">
-                    <Tag class="absolute left-4 w-5 h-5 text-slate-300" />
-                    <input v-model="profile.username" type="text" placeholder="设置用户名" 
-                           class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                  </div>
-                </div>
-
-                <div class="space-y-2 md:col-span-2">
-                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">电子邮箱 (不可修改)</label>
-                  <div class="relative flex items-center">
-                    <Mail class="absolute left-4 w-5 h-5 text-slate-300" />
-                    <input :value="authStore.user?.email" disabled type="email" 
-                           class="w-full pl-12 pr-4 py-4 bg-slate-100 border border-slate-100 rounded-2xl outline-none font-bold text-slate-400 cursor-not-allowed" />
-                  </div>
-                </div>
-              </div>
-
-              <!-- 提示信息 -->
-              <div v-if="message.text" :class="['p-4 rounded-2xl text-sm font-bold flex items-center gap-2', message.type === 'success' ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600']">
-                <CheckCircle2 v-if="message.type === 'success'" class="w-5 h-5" />
-                {{ message.text }}
-              </div>
-
-              <button :disabled="loading" type="submit" 
-                      class="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white py-5 rounded-[1.5rem] font-bold shadow-xl transition-all flex items-center justify-center gap-2">
-                <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
-                <template v-else>
-                  <Save class="w-5 h-5" />
-                  保存更改
-                </template>
-              </button>
-            </form>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <article class="club-panel-muted p-5">
+                <p class="text-sm text-slate-400">账户角色</p>
+                <p class="mt-2 text-lg font-semibold text-white">
+                  {{ profile.role === 'student' ? '学生用户' : profile.role }}
+                </p>
+              </article>
+              <article class="club-panel-muted p-5">
+                <p class="text-sm text-slate-400">资料状态</p>
+                <p class="mt-2 text-lg font-semibold text-white">可更新</p>
+              </article>
+            </div>
           </div>
         </section>
 
-        <!-- 其他操作 -->
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-[2rem] shadow-lg border border-slate-50 flex items-center justify-between group cursor-pointer">
-            <div>
-              <div class="font-bold text-slate-800">修改密码</div>
-              <div class="text-xs text-slate-400 font-medium">定期更换密码更安全</div>
-            </div>
-            <div class="p-3 bg-slate-50 rounded-xl group-hover:bg-primary group-hover:text-white transition-all">
-              <ArrowRight class="w-5 h-5" />
-            </div>
+        <section class="club-panel p-6 md:p-8">
+          <div class="mb-6">
+            <p class="text-sm text-slate-400">Editable Fields</p>
+            <h2 class="mt-1 font-display text-3xl font-bold text-white">更新个人资料</h2>
           </div>
-          <div class="bg-white p-6 rounded-[2rem] shadow-lg border border-slate-50 flex items-center justify-between group cursor-pointer">
-            <div>
-              <div class="font-bold text-slate-800">账号设置</div>
-              <div class="text-xs text-slate-400 font-medium">管理您的隐私与通知</div>
+
+          <form @submit.prevent="handleUpdate" class="space-y-5">
+            <div class="grid gap-5 md:grid-cols-2">
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300">真实姓名</label>
+                <div class="relative">
+                  <UserIcon class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                  <input
+                    v-model="profile.full_name"
+                    type="text"
+                    placeholder="请输入姓名"
+                    class="club-input w-full py-4 pl-12 pr-4"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300">用户名</label>
+                <div class="relative">
+                  <Tag class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                  <input
+                    v-model="profile.username"
+                    type="text"
+                    placeholder="设置用户名"
+                    class="club-input w-full py-4 pl-12 pr-4"
+                  />
+                </div>
+              </div>
             </div>
-            <div class="p-3 bg-slate-50 rounded-xl group-hover:bg-primary group-hover:text-white transition-all">
-              <ArrowRight class="w-5 h-5" />
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-slate-300">电子邮箱</label>
+              <div class="relative">
+                <Mail class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                <input
+                  :value="authStore.user?.email"
+                  disabled
+                  type="email"
+                  class="club-input w-full cursor-not-allowed py-4 pl-12 pr-4 opacity-70"
+                />
+              </div>
             </div>
+
+            <div
+              v-if="message.text"
+              :class="[
+                'rounded-2xl border px-4 py-3 text-sm leading-6',
+                message.type === 'success'
+                  ? 'border-emerald-400/20 bg-emerald-400/10 text-emerald-100'
+                  : 'border-rose-400/20 bg-rose-400/10 text-rose-100'
+              ]"
+            >
+              <div class="flex items-center gap-2">
+                <CheckCircle2 v-if="message.type === 'success'" class="h-5 w-5" />
+                <span>{{ message.text }}</span>
+              </div>
+            </div>
+
+            <button
+              :disabled="loading"
+              type="submit"
+              class="club-button-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-semibold disabled:opacity-60"
+            >
+              <Loader2 v-if="loading" class="h-5 w-5 animate-spin" />
+              <template v-else>
+                <Save class="h-5 w-5" />
+                保存更改
+              </template>
+            </button>
+          </form>
+
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <button type="button" class="card-hover club-panel-muted flex items-center justify-between p-5 text-left">
+              <div>
+                <p class="font-semibold text-white">修改密码</p>
+                <p class="mt-2 text-sm text-slate-400">定期更新密码可提升账户安全性。</p>
+              </div>
+              <ArrowRight class="h-5 w-5 text-slate-500" />
+            </button>
+            <button type="button" class="card-hover club-panel-muted flex items-center justify-between p-5 text-left">
+              <div>
+                <p class="font-semibold text-white">账号设置</p>
+                <p class="mt-2 text-sm text-slate-400">管理通知、隐私与后续账户偏好。</p>
+              </div>
+              <ArrowRight class="h-5 w-5 text-slate-500" />
+            </button>
           </div>
         </section>
       </main>

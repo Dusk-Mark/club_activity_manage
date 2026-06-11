@@ -51,79 +51,132 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-6xl mx-auto">
-      <!-- 头部 -->
-      <header class="flex items-center justify-between mb-8">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
-          返回
-        </button>
-        <h1 class="text-xl font-bold text-slate-900">探索社团</h1>
-        <div class="w-20"></div>
-      </header>
-
-      <main class="space-y-8">
-        <!-- 搜索与筛选 -->
-        <section class="bg-white p-6 rounded-[2.5rem] shadow-xl flex flex-col md:flex-row gap-4 items-center">
-          <div class="flex-1 flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100 w-full">
-            <Search class="w-5 h-5 text-slate-300 ml-2" />
-            <input v-model="searchQuery" type="text" placeholder="输入关键词搜索社团..." class="bg-transparent border-none outline-none flex-1 font-bold text-slate-700" />
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6">
+      <header class="club-panel flex flex-col gap-5 px-5 py-5 md:px-6 xl:flex-row xl:items-end xl:justify-between">
+        <div class="space-y-4">
+          <button
+            type="button"
+            class="club-back-button inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold"
+            @click="router.back()"
+          >
+            <ArrowLeft class="h-4 w-4" />
+            返回
+          </button>
+          <div>
+            <p class="text-sm text-slate-400">Club Directory</p>
+            <h1 class="font-display text-4xl font-bold text-white md:text-5xl">探索社团</h1>
           </div>
-          
-          <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto no-scrollbar">
-            <button v-for="cat in categories" :key="cat"
-                    @click="selectedCategory = cat"
-                    :class="['px-5 py-2.5 rounded-xl font-bold text-sm transition-all whitespace-nowrap', 
-                             selectedCategory === cat ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-50 text-slate-400 hover:bg-slate-100']">
-              {{ cat }}
-            </button>
-          </div>
-        </section>
-
-        <!-- 社团网格 -->
-        <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="i in 6" :key="i" class="bg-white p-6 rounded-[2.5rem] shadow-lg animate-pulse h-48"></div>
+          <p class="max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
+            浏览校园里的兴趣共同体，查看简介、成员规模与近期动向，并快速进入对应社团主页。
+          </p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="club in filteredClubs" :key="club.id" 
-               @click="router.push(`/club/${club.id}`)"
-               class="bg-white p-8 rounded-[3rem] shadow-xl hover:shadow-2xl transition-all group border border-transparent hover:border-primary/10 flex flex-col cursor-pointer">
-            <div class="flex items-start justify-between mb-6">
-              <div class="w-20 h-20 rounded-[2rem] bg-slate-50 overflow-hidden shadow-inner border border-slate-100 p-1">
-                <img :src="club.logo_url || `https://ui-avatars.com/api/?name=${club.name}&background=random&size=128`" class="w-full h-full object-cover rounded-[1.8rem]" />
-              </div>
-              <div class="flex items-center gap-1 text-amber-500 bg-amber-50 px-3 py-1 rounded-full">
-                <Trophy class="w-3.5 h-3.5 fill-amber-500" />
-                <span class="text-[10px] font-bold uppercase tracking-widest">推荐</span>
-              </div>
+        <div class="grid gap-3 sm:grid-cols-3 xl:min-w-[380px]">
+          <article class="club-panel-muted p-4">
+            <p class="text-sm text-slate-400">社团总数</p>
+            <p class="mt-2 text-2xl font-semibold text-white">{{ clubs.length }}</p>
+          </article>
+          <article class="club-panel-muted p-4">
+            <p class="text-sm text-slate-400">筛选分类</p>
+            <p class="mt-2 text-2xl font-semibold text-white">{{ categories.length }}</p>
+          </article>
+          <article class="club-panel-muted p-4">
+            <p class="text-sm text-slate-400">当前视图</p>
+            <p class="mt-2 text-lg font-semibold text-white">{{ selectedCategory }}</p>
+          </article>
+        </div>
+      </header>
+
+      <main class="space-y-6">
+        <section class="club-panel p-5 md:p-6">
+          <div class="flex flex-col gap-4 xl:flex-row xl:items-center">
+            <div class="relative flex-1">
+              <Search class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+              <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="输入关键词搜索社团..."
+                class="club-input w-full py-4 pl-12 pr-4"
+              />
             </div>
 
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors">{{ club.name }}</h3>
-              <p class="text-slate-400 text-sm font-medium line-clamp-2 mb-6 leading-relaxed">{{ club.description || '暂无社团简介。' }}</p>
-            </div>
-
-            <div class="flex items-center justify-between pt-6 border-t border-slate-50">
-              <div class="flex items-center gap-2">
-                <div class="flex -space-x-2">
-                  <div v-for="i in 3" :key="i" class="w-6 h-6 rounded-full border-2 border-white bg-slate-200"></div>
-                </div>
-                <span class="text-xs font-bold text-slate-400">{{ club.memberCount }} 名成员</span>
-              </div>
-              <button class="p-3 bg-slate-900 text-white rounded-2xl hover:bg-primary transition-all shadow-lg shadow-slate-900/10">
-                <ChevronRight class="w-5 h-5" />
+            <div class="flex w-full items-center gap-2 overflow-x-auto pb-2 xl:w-auto xl:pb-0 no-scrollbar">
+              <button
+                v-for="cat in categories"
+                :key="cat"
+                type="button"
+                @click="selectedCategory = cat"
+                :class="[
+                  'whitespace-nowrap rounded-2xl px-5 py-3 text-sm font-semibold transition-all',
+                  selectedCategory === cat ? 'club-button-primary' : 'club-button-secondary'
+                ]"
+              >
+                {{ cat }}
               </button>
             </div>
           </div>
+        </section>
+
+        <div v-if="loading" class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div v-for="i in 6" :key="i" class="club-panel-muted shimmer-block h-72 rounded-[28px]" />
         </div>
 
-        <!-- 空状态 -->
-        <div v-if="!loading && filteredClubs.length === 0" class="bg-white p-20 rounded-[3rem] shadow-xl text-center">
-          <Search class="w-16 h-16 text-slate-100 mx-auto mb-4" />
-          <p class="text-slate-400 font-bold text-xl">未找到相关社团</p>
-          <button @click="searchQuery = ''; selectedCategory = '全部'" class="mt-4 text-primary font-bold hover:underline">重置搜索</button>
+        <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <button
+            v-for="club in filteredClubs"
+            :key="club.id"
+            type="button"
+            class="group card-hover club-panel overflow-hidden p-2 text-left"
+            @click="router.push(`/club/${club.id}`)"
+          >
+            <div class="relative overflow-hidden rounded-[24px]">
+              <img
+                :src="club.logo_url || `https://picsum.photos/seed/${encodeURIComponent(club.name)}/960/720`"
+                :alt="club.name"
+                class="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#060807] via-[#060807]/18 to-transparent" />
+              <div class="absolute left-5 top-5">
+                <span class="club-pill px-3 py-1 text-xs">社团名录</span>
+              </div>
+              <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
+                <div class="min-w-0">
+                  <p class="text-xs uppercase tracking-[0.18em] text-white/60">Campus Club</p>
+                  <h3 class="truncate font-display text-3xl font-bold text-white">{{ club.name }}</h3>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-black/25 p-3 text-white backdrop-blur-md">
+                  <ChevronRight class="h-5 w-5" />
+                </div>
+              </div>
+            </div>
+
+            <div class="grid gap-4 p-5">
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-[#ecd7ad]">
+                  <Trophy class="h-4 w-4" />
+                  <span class="text-sm font-medium">推荐组织</span>
+                </div>
+                <span class="text-sm text-slate-400">{{ club.memberCount }} 名成员</span>
+              </div>
+              <p class="line-clamp-3 text-sm leading-7 text-slate-300">
+                {{ club.description || '暂无社团简介。' }}
+              </p>
+            </div>
+          </button>
+        </div>
+
+        <div v-if="!loading && filteredClubs.length === 0" class="club-empty-state p-16">
+          <Search class="mx-auto h-14 w-14 text-slate-500" />
+          <p class="mt-4 font-display text-3xl font-bold text-white">未找到相关社团</p>
+          <p class="mt-2 text-sm text-slate-400">换一个关键词试试，或者重置筛选条件后重新浏览。</p>
+          <button
+            type="button"
+            class="club-button-primary mt-6 rounded-2xl px-5 py-3 text-sm font-semibold"
+            @click="searchQuery = ''; selectedCategory = '全部'"
+          >
+            重置搜索
+          </button>
         </div>
       </main>
     </div>

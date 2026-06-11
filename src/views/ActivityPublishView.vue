@@ -160,110 +160,148 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-3xl mx-auto">
-      <header class="flex items-center justify-between mb-8">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
-          返回
-        </button>
-        <h1 class="text-xl font-bold text-slate-900">发布新活动</h1>
-        <div class="w-20"></div>
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-5xl space-y-6">
+      <header class="club-panel flex flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="club-back-button flex h-12 w-12 items-center justify-center"
+            @click="router.back()"
+          >
+            <ArrowLeft class="h-5 w-5" />
+          </button>
+          <div>
+            <p class="text-sm text-slate-400">Activity Studio</p>
+            <h1 class="font-display text-3xl font-bold text-white">发布新活动</h1>
+          </div>
+        </div>
+        <span class="club-pill w-fit px-4 py-2 text-sm">活动编排入口</span>
       </header>
 
-      <main>
-        <section class="bg-white p-8 lg:p-12 rounded-[3rem] shadow-xl relative overflow-hidden">
-          <div class="relative z-10">
-            <div class="mb-10">
-              <h2 class="text-3xl font-bold text-slate-900 mb-2">发布新的校园活动</h2>
-              <p class="text-slate-500 font-medium">统一填写时间、地点、名额与活动内容，让社团成员更快完成报名与参与。</p>
+      <main class="club-panel p-6 md:p-8 lg:p-10">
+        <div class="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+          <section class="space-y-5">
+            <div>
+              <p class="text-sm text-slate-400">Publishing Brief</p>
+              <h2 class="mt-1 font-display text-4xl font-bold text-white">建立一场可报名、可签到、可归档的校园活动</h2>
             </div>
+            <p class="text-sm leading-7 text-slate-300">
+              统一填写时间、地点、名额与活动说明，学生端将按此信息完成浏览、报名与后续参与。
+            </p>
 
-            <form @submit.prevent="handlePublish" class="space-y-8">
-              <!-- 选择社团 -->
+            <div class="club-panel-muted p-6">
+              <div class="mb-4 flex items-center gap-3 text-[#d9e7de]">
+                <Info class="h-5 w-5" />
+                <span class="text-sm font-medium">发布后即进入协作链路</span>
+              </div>
+              <p class="text-sm leading-7 text-slate-300">
+                活动发布后，报名申请、签到流程和反馈收集会自动围绕该活动展开，后续也可继续补充资料归档。
+              </p>
+            </div>
+          </section>
+
+          <section>
+            <form @submit.prevent="handlePublish" class="space-y-5">
               <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">发布社团</label>
-                <div v-if="pageMessage" class="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                <label class="text-sm font-medium text-slate-300">发布社团</label>
+                <div
+                  v-if="pageMessage"
+                  class="rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-3 text-sm leading-6 text-amber-100"
+                >
                   {{ pageMessage }}
                 </div>
-                <select v-model="selectedClubId" 
-                        class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700 appearance-none">
+                <select v-model="selectedClubId" class="club-input w-full px-5 py-4">
                   <option value="">请选择社团</option>
                   <option v-for="club in myClubs" :key="club.id" :value="club.id">{{ club.name }}</option>
                 </select>
               </div>
 
-              <!-- 基本信息 -->
-              <div class="space-y-6">
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300">活动标题</label>
+                <input
+                  v-model="activityForm.title"
+                  type="text"
+                  placeholder="例如：春季草地音乐节"
+                  class="club-input w-full px-5 py-4"
+                />
+              </div>
+
+              <div class="grid gap-5 md:grid-cols-2">
                 <div class="space-y-2">
-                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">活动标题</label>
-                  <input v-model="activityForm.title" type="text" placeholder="例如：春季草地音乐节" 
-                         class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">开始时间</label>
-                    <div class="relative flex items-center">
-                      <Calendar class="absolute left-4 w-5 h-5 text-slate-300" />
-                      <input v-model="activityForm.start_time" type="datetime-local" 
-                             class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                    </div>
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">结束时间</label>
-                    <div class="relative flex items-center">
-                      <Clock class="absolute left-4 w-5 h-5 text-slate-300" />
-                      <input v-model="activityForm.end_time" type="datetime-local" 
-                             class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                    </div>
+                  <label class="text-sm font-medium text-slate-300">开始时间</label>
+                  <div class="relative">
+                    <Calendar class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                    <input
+                      v-model="activityForm.start_time"
+                      type="datetime-local"
+                      class="club-input w-full py-4 pl-12 pr-4"
+                    />
                   </div>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">活动地点</label>
-                    <div class="relative flex items-center">
-                      <MapPin class="absolute left-4 w-5 h-5 text-slate-300" />
-                      <input v-model="activityForm.location" type="text" placeholder="校内大礼堂" 
-                             class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                    </div>
-                  </div>
-                  <div class="space-y-2">
-                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">招募名额</label>
-                    <div class="relative flex items-center">
-                      <Users class="absolute left-4 w-5 h-5 text-slate-300" />
-                      <input v-model.number="activityForm.max_participants" type="number" 
-                             class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-                    </div>
-                  </div>
-                </div>
-
                 <div class="space-y-2">
-                  <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">活动内容详情</label>
-                  <textarea v-model="activityForm.description" rows="5" placeholder="详细介绍活动的流程、要求以及参与方式..." 
-                            class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700 resize-none"></textarea>
+                  <label class="text-sm font-medium text-slate-300">结束时间</label>
+                  <div class="relative">
+                    <Clock class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                    <input
+                      v-model="activityForm.end_time"
+                      type="datetime-local"
+                      class="club-input w-full py-4 pl-12 pr-4"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100 flex gap-4">
-                <Info class="w-6 h-6 text-blue-500 flex-shrink-0" />
-                <p class="text-xs text-blue-700 font-medium leading-relaxed">
-                  提示：活动发布后将立即对全校学生可见，您可以在管理后台查看报名名单并进行审核。
-                </p>
+              <div class="grid gap-5 md:grid-cols-2">
+                <div class="space-y-2">
+                  <label class="text-sm font-medium text-slate-300">活动地点</label>
+                  <div class="relative">
+                    <MapPin class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                    <input
+                      v-model="activityForm.location"
+                      type="text"
+                      placeholder="校内大礼堂"
+                      class="club-input w-full py-4 pl-12 pr-4"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm font-medium text-slate-300">招募名额</label>
+                  <div class="relative">
+                    <Users class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                    <input
+                      v-model.number="activityForm.max_participants"
+                      type="number"
+                      class="club-input w-full py-4 pl-12 pr-4"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <button :disabled="loading" type="submit" 
-                      class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-bold shadow-xl transition-all flex items-center justify-center gap-2 hover:bg-slate-800 disabled:opacity-50">
-                <Loader2 v-if="loading" class="w-5 h-5 animate-spin" />
+              <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300">活动内容详情</label>
+                <textarea
+                  v-model="activityForm.description"
+                  rows="6"
+                  placeholder="详细介绍活动流程、要求以及参与方式..."
+                  class="club-input w-full resize-none px-5 py-4"
+                />
+              </div>
+
+              <button
+                :disabled="loading"
+                type="submit"
+                class="club-button-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-semibold disabled:opacity-60"
+              >
+                <Loader2 v-if="loading" class="h-5 w-5 animate-spin" />
                 <template v-else>
-                  <Send class="w-5 h-5" />
+                  <Send class="h-5 w-5" />
                   确认发布活动
                 </template>
               </button>
             </form>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
     </div>
   </div>

@@ -84,114 +84,152 @@ const filteredMembers = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-5xl mx-auto">
-      <header class="flex items-center justify-between mb-8">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
-          返回
-        </button>
-        <h1 class="text-xl font-bold text-slate-900">社员信息管理</h1>
-        <div class="w-20"></div>
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-6">
+      <header class="club-panel flex flex-col gap-4 px-5 py-5 md:flex-row md:items-center md:justify-between md:px-6">
+        <div class="flex items-center gap-4">
+          <button
+            type="button"
+            class="club-back-button flex h-12 w-12 items-center justify-center"
+            @click="router.back()"
+          >
+            <ArrowLeft class="h-5 w-5" />
+          </button>
+          <div>
+            <p class="text-sm text-slate-400">Member Registry</p>
+            <h1 class="font-display text-3xl font-bold text-white">社员信息管理</h1>
+          </div>
+        </div>
+        <span class="club-status-chip w-fit px-4 py-2 text-sm">组织成员维护</span>
       </header>
 
-      <div v-if="myClubs.length === 0 && !loading" class="bg-white p-12 rounded-[3rem] shadow-xl text-center">
-        <Users class="w-16 h-16 text-slate-200 mx-auto mb-4" />
-        <h2 class="text-2xl font-bold text-slate-800 mb-2">您还没有管理的社团</h2>
-        <button @click="router.push('/create-club')" class="bg-primary text-white px-8 py-3 rounded-2xl font-bold shadow-lg shadow-primary/20">创建社团</button>
+      <div v-if="myClubs.length === 0 && !loading" class="club-empty-state p-12">
+        <Users class="mx-auto h-16 w-16 text-slate-500" />
+        <h2 class="mt-4 font-display text-3xl font-bold text-white">您还没有管理的社团</h2>
+        <button
+          type="button"
+          class="club-button-primary mt-6 rounded-2xl px-8 py-3 text-sm font-semibold"
+          @click="router.push('/create-club')"
+        >
+          创建社团
+        </button>
       </div>
 
-      <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- 左侧社团列表 -->
-        <aside class="lg:col-span-1 space-y-4">
-          <div class="bg-white p-6 rounded-[2.5rem] shadow-xl">
-            <h3 class="font-bold text-xs text-slate-400 uppercase tracking-widest mb-4 ml-2">管理的社团</h3>
-            <div class="space-y-2">
-              <button v-for="club in myClubs" :key="club.id"
-                      @click="selectedClubId = club.id; fetchMembers()"
-                      :class="['w-full flex items-center gap-3 p-4 rounded-2xl transition-all font-bold text-left', 
-                               selectedClubId === club.id ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'hover:bg-slate-50 text-slate-600']">
-                <ShieldCheck class="w-5 h-5" />
-                <span class="truncate">{{ club.name }}</span>
+      <div v-else class="grid grid-cols-1 gap-6 lg:grid-cols-[0.34fr_0.66fr]">
+        <aside class="space-y-4">
+          <section class="club-panel p-5 md:p-6">
+            <p class="text-sm text-slate-400">Managed Clubs</p>
+            <h3 class="mt-1 font-display text-3xl font-bold text-white">管理的社团</h3>
+            <div class="mt-5 space-y-3">
+              <button
+                v-for="club in myClubs"
+                :key="club.id"
+                type="button"
+                @click="selectedClubId = club.id; fetchMembers()"
+                :class="[
+                  'w-full rounded-2xl p-4 text-left text-sm font-semibold transition-all',
+                  selectedClubId === club.id ? 'club-button-primary' : 'club-button-secondary'
+                ]"
+              >
+                <span class="flex items-center gap-3">
+                  <ShieldCheck class="h-4 w-4" />
+                  <span class="truncate">{{ club.name }}</span>
+                </span>
               </button>
             </div>
-          </div>
+          </section>
         </aside>
 
-        <!-- 右侧成员列表 -->
-        <main class="lg:col-span-3 space-y-6">
-          <section class="bg-white p-8 rounded-[3rem] shadow-xl min-h-[600px]">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <main>
+          <section class="club-panel min-h-[600px] p-6 md:p-8">
+            <div class="mb-8 flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <h2 class="text-2xl font-bold text-slate-900">所有成员</h2>
-                <p class="text-sm text-slate-400 font-bold uppercase tracking-wider mt-1">{{ filteredMembers().length }} 位成员</p>
+                <p class="text-sm text-slate-400">All Members</p>
+                <h2 class="mt-1 font-display text-3xl font-bold text-white">所有成员</h2>
+                <p class="mt-2 text-sm text-slate-400">{{ filteredMembers().length }} 位成员</p>
               </div>
 
-              <div class="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl border border-slate-100 min-w-[250px]">
-                <Search class="w-5 h-5 text-slate-300 ml-2" />
-                <input v-model="searchQuery" type="text" placeholder="搜索成员姓名..." class="bg-transparent border-none outline-none flex-1 text-sm font-bold" />
+              <div class="relative w-full md:max-w-[280px]">
+                <Search class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="搜索成员姓名..."
+                  class="club-input w-full py-4 pl-12 pr-4"
+                />
               </div>
             </div>
 
             <div v-if="loading" class="flex justify-center py-20">
-              <Loader2 class="w-8 h-8 animate-spin text-primary" />
+              <Loader2 class="h-8 w-8 animate-spin text-[#ecd7ad]" />
             </div>
 
             <div v-else class="overflow-x-auto">
-              <table class="w-full">
+              <table class="w-full min-w-[720px]">
                 <thead>
-                  <tr class="text-left border-b border-slate-50">
-                    <th class="pb-4 pl-4 text-xs font-bold text-slate-400 uppercase tracking-widest">成员信息</th>
-                    <th class="pb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">职位角色</th>
-                    <th class="pb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">加入时间</th>
-                    <th class="pb-4 pr-4 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">操作</th>
+                  <tr class="border-b border-white/8 text-left">
+                    <th class="pb-4 pl-4 text-sm font-medium text-slate-400">成员信息</th>
+                    <th class="pb-4 text-sm font-medium text-slate-400">职位角色</th>
+                    <th class="pb-4 text-sm font-medium text-slate-400">加入时间</th>
+                    <th class="pb-4 pr-4 text-right text-sm font-medium text-slate-400">操作</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
-                  <tr v-for="m in filteredMembers()" :key="m.id" class="group">
+                <tbody class="divide-y divide-white/6">
+                  <tr v-for="m in filteredMembers()" :key="m.id">
                     <td class="py-6 pl-4">
                       <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden shadow-sm">
-                          <img :src="m.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${m.profiles?.full_name}&background=random`" class="w-full h-full object-cover" />
+                        <div class="h-11 w-11 overflow-hidden rounded-2xl border border-white/8 bg-white/5">
+                          <img
+                            :src="m.profiles?.avatar_url || `https://ui-avatars.com/api/?name=${m.profiles?.full_name}&background=111515&color=F7F2EA`"
+                            :alt="m.profiles?.full_name || '成员头像'"
+                            class="h-full w-full object-cover"
+                          />
                         </div>
                         <div>
-                          <div class="font-bold text-slate-800">{{ m.profiles?.full_name }}</div>
-                          <div class="text-xs text-slate-400 font-medium">@{{ m.profiles?.username }}</div>
+                          <div class="font-semibold text-white">{{ m.profiles?.full_name }}</div>
+                          <div class="mt-1 text-xs text-slate-500">@{{ m.profiles?.username }}</div>
                         </div>
                       </div>
                     </td>
                     <td class="py-6">
-                      <span :class="['px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest', 
-                                     m.role === 'admin'
-                                       ? 'bg-amber-50 text-amber-600'
-                                       : m.role === 'leader'
-                                         ? 'bg-blue-50 text-blue-500'
-                                         : 'bg-slate-50 text-slate-500']">
+                      <span
+                        :class="[
+                          'rounded-full border px-3 py-1 text-xs',
+                          m.role === 'admin'
+                            ? 'border-[#d6bf8f]/20 bg-[#d6bf8f]/10 text-[#ecd7ad]'
+                            : m.role === 'leader'
+                              ? 'border-[#6d8d7d]/20 bg-[#6d8d7d]/10 text-[#d9e7de]'
+                              : 'border-white/8 bg-white/5 text-slate-300'
+                        ]"
+                      >
                         {{ m.role === 'admin' ? '管理员' : m.role === 'leader' ? '负责人' : '普通成员' }}
                       </span>
                     </td>
-                    <td class="py-6 text-sm text-slate-500 font-medium">
+                    <td class="py-6 text-sm text-slate-400">
                       {{ new Date(m.joined_at).toLocaleDateString() }}
                     </td>
                     <td class="py-6 pr-4 text-right">
                       <div class="flex items-center justify-end gap-2">
-                        <button v-if="m.user_id !== authStore.user?.id" 
-                                @click="handleRemoveMember(m.user_id)"
-                                class="p-2 text-slate-300 hover:text-red-500 transition-colors">
-                          <Trash2 class="w-5 h-5" />
+                        <button
+                          v-if="m.user_id !== authStore.user?.id"
+                          type="button"
+                          @click="handleRemoveMember(m.user_id)"
+                          class="rounded-xl border border-rose-400/16 bg-rose-400/10 p-2 text-rose-100 transition-colors hover:bg-rose-400/16"
+                        >
+                          <Trash2 class="h-4 w-4" />
                         </button>
-                        <button class="p-2 text-slate-300 hover:text-primary transition-colors">
-                          <MoreVertical class="w-5 h-5" />
+                        <button type="button" class="rounded-xl border border-white/8 bg-white/5 p-2 text-slate-300">
+                          <MoreVertical class="h-4 w-4" />
                         </button>
                       </div>
                     </td>
                   </tr>
                 </tbody>
               </table>
-              
-              <div v-if="filteredMembers().length === 0" class="flex flex-col items-center justify-center py-20 text-slate-300">
-                <User class="w-12 h-12 mb-4" />
-                <p class="font-bold">未找到匹配的成员</p>
+
+              <div v-if="filteredMembers().length === 0" class="flex flex-col items-center justify-center py-20 text-center">
+                <User class="h-12 w-12 text-slate-500" />
+                <p class="mt-4 text-base font-medium text-slate-300">未找到匹配的成员</p>
               </div>
             </div>
           </section>

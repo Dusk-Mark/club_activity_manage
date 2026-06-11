@@ -70,103 +70,149 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-wanderlust p-4 lg:p-8">
-    <div class="max-w-5xl mx-auto">
-      <header class="flex items-center justify-between mb-8">
-        <button @click="router.back()" class="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full shadow-sm hover:shadow-md transition-all font-bold text-slate-600">
-          <ArrowLeft class="w-5 h-5" />
-          返回
-        </button>
-        <h1 class="text-xl font-bold text-slate-900">新闻公告管理</h1>
-        <button @click="showCreateModal = true" class="flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all">
-          <Plus class="w-5 h-5" />
+  <div class="club-shell px-4 py-4 md:px-6 lg:px-8">
+    <div class="mx-auto max-w-6xl space-y-6">
+      <header class="club-panel flex flex-col gap-4 px-5 py-5 md:flex-row md:items-end md:justify-between md:px-6">
+        <div class="space-y-3">
+          <button
+            type="button"
+            class="club-back-button inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold"
+            @click="router.back()"
+          >
+            <ArrowLeft class="h-4 w-4" />
+            返回
+          </button>
+          <div>
+            <p class="text-sm text-slate-400">Newsroom</p>
+            <h1 class="font-display text-4xl font-bold text-white">新闻公告管理</h1>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="club-button-primary flex w-fit items-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold"
+          @click="showCreateModal = true"
+        >
+          <Plus class="h-4 w-4" />
           发布公告
         </button>
       </header>
 
       <main>
-        <div v-if="loading" class="flex justify-center py-20">
-          <Loader2 class="w-10 h-10 animate-spin text-primary" />
+        <div v-if="loading" class="club-panel flex justify-center py-20">
+          <Loader2 class="h-10 w-10 animate-spin text-[#ecd7ad]" />
         </div>
 
-        <div v-else-if="posts.length === 0" class="bg-white p-20 rounded-[3rem] shadow-xl text-center">
-          <Newspaper class="w-16 h-16 text-slate-100 mx-auto mb-4" />
-          <p class="text-slate-400 font-bold">暂无新闻公告</p>
+        <div v-else-if="posts.length === 0" class="club-empty-state p-20">
+          <Newspaper class="mx-auto h-16 w-16 text-slate-500" />
+          <p class="mt-4 font-display text-3xl font-bold text-white">暂无新闻公告</p>
+          <p class="mt-2 text-sm text-slate-400">新发布的校园新闻、通知与规章会在这里统一展示。</p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="post in posts" :key="post.id" 
-               class="bg-white p-8 rounded-[2.5rem] shadow-xl hover:shadow-2xl transition-all group border border-transparent hover:border-primary/10">
-            <div class="flex items-center justify-between mb-4">
-              <span :class="['px-3 py-1 text-[10px] font-bold rounded-full uppercase tracking-widest', 
-                             post.type === 'news' ? 'bg-blue-50 text-blue-500' : 
-                             post.type === 'announcement' ? 'bg-amber-50 text-amber-500' : 'bg-purple-50 text-purple-500']">
+        <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <article
+            v-for="post in posts"
+            :key="post.id"
+            class="card-hover club-panel p-6 md:p-7"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <span
+                :class="[
+                  'rounded-full border px-3 py-1 text-xs',
+                  post.type === 'news'
+                    ? 'border-[#6d8d7d]/20 bg-[#6d8d7d]/10 text-[#d9e7de]'
+                    : post.type === 'announcement'
+                      ? 'border-[#d6bf8f]/20 bg-[#d6bf8f]/10 text-[#ecd7ad]'
+                      : 'border-white/10 bg-white/5 text-slate-300'
+                ]"
+              >
                 {{ post.type === 'news' ? '校园新闻' : post.type === 'announcement' ? '重要通知' : '规章制度' }}
               </span>
-              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1">
-                <Calendar class="w-3 h-3" /> {{ new Date(post.created_at).toLocaleDateString() }}
+              <span class="flex items-center gap-1 text-xs text-slate-500">
+                <Calendar class="h-3 w-3" />
+                {{ new Date(post.created_at).toLocaleDateString() }}
               </span>
             </div>
-            <h2 class="text-xl font-bold text-slate-800 mb-4 group-hover:text-primary transition-colors leading-tight">{{ post.title }}</h2>
-            <p class="text-slate-500 text-sm line-clamp-3 mb-6 leading-relaxed">{{ post.content }}</p>
-            <div class="flex items-center justify-between pt-6 border-t border-slate-50">
-              <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">
-                  <User class="w-3 h-3 text-slate-400" />
+
+            <h2 class="mt-5 font-display text-3xl font-bold leading-tight text-white">
+              {{ post.title }}
+            </h2>
+            <p class="mt-4 line-clamp-4 text-sm leading-7 text-slate-300">{{ post.content }}</p>
+
+            <div class="club-divider my-5" />
+
+            <div class="flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="flex h-9 w-9 items-center justify-center rounded-2xl border border-white/8 bg-white/5">
+                  <User class="h-4 w-4 text-slate-400" />
                 </div>
-                <span class="text-xs font-bold text-slate-600">{{ post.profiles?.full_name || '管理员' }}</span>
+                <span class="text-sm text-slate-300">{{ post.profiles?.full_name || '管理员' }}</span>
               </div>
-              <button class="text-primary text-xs font-bold hover:underline">阅读详情</button>
+              <button type="button" class="text-sm font-medium text-[#ecd7ad]">阅读详情</button>
             </div>
-          </div>
+          </article>
         </div>
       </main>
 
-      <!-- 发布弹窗 -->
       <div v-if="showCreateModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showCreateModal = false"></div>
-        <div class="bg-white w-full max-w-lg rounded-[3rem] shadow-2xl relative z-10 overflow-hidden">
-          <div class="p-8 lg:p-10">
-            <div class="flex items-center justify-between mb-8">
-              <h3 class="text-2xl font-bold text-slate-900">发布新闻公告</h3>
-              <button @click="showCreateModal = false" class="p-2 hover:bg-slate-50 rounded-full transition-colors">
-                <X class="w-6 h-6 text-slate-400" />
-              </button>
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md" @click="showCreateModal = false"></div>
+        <div class="club-panel relative z-10 w-full max-w-xl p-7 md:p-8">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <p class="text-sm text-slate-400">New Post</p>
+              <h3 class="mt-1 font-display text-3xl font-bold text-white">发布新闻公告</h3>
+            </div>
+            <button
+              type="button"
+              class="club-back-button flex h-11 w-11 items-center justify-center"
+              @click="showCreateModal = false"
+            >
+              <X class="h-5 w-5" />
+            </button>
+          </div>
+
+          <form @submit.prevent="handlePublish" class="space-y-5">
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-slate-300">标题</label>
+              <input
+                v-model="newPost.title"
+                type="text"
+                placeholder="请输入标题..."
+                class="club-input w-full px-5 py-4"
+              />
             </div>
 
-            <form @submit.prevent="handlePublish" class="space-y-6">
-              <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">标题</label>
-                <input v-model="newPost.title" type="text" placeholder="请输入标题..." 
-                       class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700" />
-              </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-slate-300">类型</label>
+              <select v-model="newPost.type" class="club-input w-full px-5 py-4">
+                <option value="news">校园新闻</option>
+                <option value="announcement">重要通知</option>
+                <option value="rule">规章制度</option>
+              </select>
+            </div>
 
-              <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">类型</label>
-                <select v-model="newPost.type" 
-                        class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700 appearance-none">
-                  <option value="news">校园新闻</option>
-                  <option value="announcement">重要通知</option>
-                  <option value="rule">规章制度</option>
-                </select>
-              </div>
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-slate-300">内容</label>
+              <textarea
+                v-model="newPost.content"
+                rows="6"
+                placeholder="请输入正文内容..."
+                class="club-input w-full resize-none px-5 py-4"
+              ></textarea>
+            </div>
 
-              <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">内容</label>
-                <textarea v-model="newPost.content" rows="5" placeholder="请输入正文内容..." 
-                          class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:bg-white focus:border-primary/30 outline-none transition-all font-bold text-slate-700 resize-none"></textarea>
-              </div>
-
-              <button :disabled="publishing" type="submit" 
-                      class="w-full bg-slate-900 text-white py-5 rounded-[1.5rem] font-bold shadow-xl transition-all flex items-center justify-center gap-2 hover:bg-slate-800 disabled:opacity-50">
-                <Loader2 v-if="publishing" class="w-5 h-5 animate-spin" />
-                <template v-else>
-                  <Send class="w-5 h-5" />
-                  确认发布
-                </template>
-              </button>
-            </form>
-          </div>
+            <button
+              :disabled="publishing"
+              type="submit"
+              class="club-button-primary flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-4 text-base font-semibold disabled:opacity-60"
+            >
+              <Loader2 v-if="publishing" class="h-5 w-5 animate-spin" />
+              <template v-else>
+                <Send class="h-5 w-5" />
+                确认发布
+              </template>
+            </button>
+          </form>
         </div>
       </div>
     </div>
