@@ -6,7 +6,6 @@ import { useAuthStore } from '../stores/auth'
 import {
   ArrowRight,
   CalendarDays,
-  Compass,
   GraduationCap,
   Loader2,
   Lock,
@@ -155,8 +154,8 @@ const handleSubmit = async () => {
   <div class="club-shell px-4 py-4 md:px-6 lg:px-10">
     <header class="club-panel mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 md:px-6">
       <div class="flex items-center gap-3">
-        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#c0a26a] to-[#e7d29c] text-[#161616] shadow-[0_16px_28px_-18px_rgba(231,210,156,0.85)]">
-          <Compass class="h-5 w-5" />
+        <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/92 p-1 shadow-[0_16px_28px_-18px_rgba(0,0,0,0.45)]">
+          <img src="/%E4%B8%AD%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%A0%A1%E5%BE%BD.png" alt="中北大学校徽" class="h-full w-full object-contain" />
         </div>
         <div>
           <p class="font-display text-lg font-bold text-white">中北大学社团活动</p>

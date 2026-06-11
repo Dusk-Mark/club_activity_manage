@@ -13,7 +13,6 @@ import {
   Circle,
   Clock3,
   Flame,
-  LayoutDashboard,
   LogOut,
   MapPin,
   Newspaper,
@@ -320,8 +319,8 @@ onMounted(() => {
     <div class="mx-auto max-w-7xl space-y-6">
       <header class="club-panel flex flex-col gap-4 px-5 py-5 md:px-6 xl:flex-row xl:items-center xl:justify-between">
         <div class="flex items-center gap-4">
-          <div class="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#c0a26a] to-[#e7d29c] text-[#171717] shadow-[0_20px_32px_-22px_rgba(231,210,156,0.9)]">
-            <LayoutDashboard class="h-6 w-6" />
+          <div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-[20px] border border-white/10 bg-white/92 p-1.5 shadow-[0_20px_32px_-22px_rgba(0,0,0,0.45)]">
+            <img src="/%E4%B8%AD%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%A0%A1%E5%BE%BD.png" alt="中北大学校徽" class="h-full w-full object-contain" />
           </div>
           <div>
             <p class="text-sm text-slate-400">Dashboard</p>

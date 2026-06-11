@@ -82,6 +82,9 @@ onMounted(() => {
             <ArrowLeft class="h-4 w-4" />
             返回
           </button>
+          <div class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/92 p-1 shadow-[0_16px_28px_-18px_rgba(0,0,0,0.45)]">
+            <img src="/%E4%B8%AD%E5%8C%97%E5%A4%A7%E5%AD%A6%E6%A0%A1%E5%BE%BD.png" alt="中北大学校徽" class="h-full w-full object-contain" />
+          </div>
           <div>
             <p class="text-sm text-slate-400">Newsroom</p>
             <h1 class="font-display text-4xl font-bold text-white">中北大学社团活动</h1>
